@@ -1,0 +1,32 @@
+#Survival analysis
+#1
+old = read.table('C:/Users/Настя/Documents/maga/R/tabl/old.csv', sep = ";",header = T)
+#log-rank test
+surv_diff <- survdiff(Surv(time, status) ~ level, data = old)
+surv_diff
+#p=0,3>0,05 => принимаем H0 - нет стат разницы между группами
+
+#2
+metastases = read.table('C:/Users/Настя/Documents/maga/R/tabl/lung resection.csv', sep = ";", header = T)
+lungsurv <- Surv(metastases$time, metastases$status)
+sfit_lung <- survfit(Surv(time, status)~1, data=metastases)
+sfit_lung
+ggsurvplot(sfit_lung, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
+           legend.labs=c("survivle"), legend.title="lung resection",  
+           palette=c("dodgerblue2"), 
+           title="Kaplan-Meier Curve for Lung cancer Survival", 
+           risk.table.height=.15)
+#3
+japan <- read.table('C:/Users/Настя/Documents/maga/R/tabl/japan.csv', sep = ";", header = T)
+japansurv <- Surv(japan$time, japan$status)
+sfit_j <- survfit(Surv(time, status)~period, data=japan)
+sfit_j
+ggsurvplot(sfit_j, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
+           legend.labs=c("1975-1979", "1980-1984"), legend.title="time period",  
+           palette=c("dodgerblue2", "orchid2"), 
+           title="Infant mortality in japan", 
+           risk.table.height=.15)
+#median=60
+surv_diff_j <- survdiff(Surv(time, status) ~ period, data = japan)
+surv_diff_j
+#p=0,9>0,05 => принимаем H0 - нет стат разницы между группами
